@@ -13,12 +13,13 @@ function App() {
   }, []);
 
   // Add a new ToDo item
-  const addTodo = () => {
+  const addTodo = (e) => {
+    e.preventDefault();
     if (text.trim() === '') return; // Prevent adding empty todos
     axios.post('/api/todos', { text })
       .then(res => {
         setTodos([...todos, res.data]);
-        setText('');
+        setText(''); // Clear the input field after adding
       })
       .catch(err => console.error(err));
   };
@@ -40,12 +41,14 @@ function App() {
   return (
     <div className="App">
       <h1>To-Do List</h1>
-      <input 
-        value={text} 
-        onChange={e => setText(e.target.value)} 
-        placeholder="Add a new task"
-      />
-      <button onClick={addTodo}>Add Todo</button>
+      <form onSubmit={addTodo}>
+        <input 
+          value={text} 
+          onChange={e => setText(e.target.value)} 
+          placeholder="Add a new task"
+        />
+        <button type="submit">Add Todo</button>
+      </form>
       <ul>
         {todos.map(todo => (
           <li key={todo._id}>
