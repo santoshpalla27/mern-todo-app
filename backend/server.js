@@ -55,6 +55,11 @@ app.delete('/api/todos/:id', async (req, res) => {
     res.json(todo);
 });
 
+// Add a route for the root URL
+app.get('/', (req, res) => {
+    res.send('Welcome to the MERN ToDo App Backend!');
+});
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
