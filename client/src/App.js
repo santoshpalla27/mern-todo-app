@@ -43,6 +43,13 @@ function App() {
         placeholder="Add a new task"
       />
       <button onClick={addTodo}>Add Todo</button>
+      {/* Display the current input text */}
+      {text && (
+        <div>
+          <h2>Current Input:</h2>
+          <p>{text}</p>
+        </div>
+      )}
       <ul>
         {todos.map(todo => (
           <li key={todo._id}>
