@@ -14,10 +14,13 @@ function App() {
 
   // Add a new ToDo item
   const addTodo = () => {
+    if (text.trim() === '') return; // Prevent adding empty todos
     axios.post('/api/todos', { text })
-      .then(res => setTodos([...todos, res.data]))
+      .then(res => {
+        setTodos([...todos, res.data]);
+        setText('');
+      })
       .catch(err => console.error(err));
-    setText('');
   };
 
   // Toggle the completed status of a ToDo item
@@ -43,13 +46,6 @@ function App() {
         placeholder="Add a new task"
       />
       <button onClick={addTodo}>Add Todo</button>
-      {/* Display the current input text */}
-      {text && (
-        <div>
-          <h2>Current Input:</h2>
-          <p>{text}</p>
-        </div>
-      )}
       <ul>
         {todos.map(todo => (
           <li key={todo._id}>
