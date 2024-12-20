@@ -13,6 +13,9 @@ RUN npm install
 # Copy local code to the container image.
 COPY . .
 
+# Set environment variable to use legacy OpenSSL provider
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
 # Build the app for production with minification.
 RUN npm run build
 
