@@ -5,20 +5,22 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [text, setText] = useState('');
 
-  // Fetch ToDo items from the backend
+  // Fetch ToDo items from the backend when the component mounts
   useEffect(() => {
     axios.get('/api/todos')
       .then(res => setTodos(res.data))
       .catch(err => console.error(err));
   }, []);
 
-  // Add a new ToDo item
+  // Handle form submission to add a new ToDo item
   const addTodo = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent the default form submission behavior
     if (text.trim() === '') return; // Prevent adding empty todos
+
+    // Post the new ToDo item to the backend
     axios.post('/api/todos', { text })
       .then(res => {
-        setTodos([...todos, res.data]);
+        setTodos([...todos, res.data]); // Update the state with the new ToDo item
         setText(''); // Clear the input field after adding
       })
       .catch(err => console.error(err));
