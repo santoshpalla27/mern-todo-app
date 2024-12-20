@@ -9,7 +9,7 @@ function App() {
   useEffect(() => {
     axios.get('/api/todos')
       .then(res => setTodos(res.data))
-      .catch(err => console.error(err));
+      .catch(err => console.error("Error fetching todos:", err));
   }, []);
 
   // Handle form submission to add a new ToDo item
@@ -23,21 +23,21 @@ function App() {
         setTodos([...todos, res.data]); // Update the state with the new ToDo item
         setText(''); // Clear the input field after adding
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error("Error adding todo:", err));
   };
 
   // Toggle the completed status of a ToDo item
   const toggleTodo = (id, completed) => {
     axios.patch(`/api/todos/${id}`, { completed })
       .then(res => setTodos(todos.map(todo => todo._id === id ? res.data : todo)))
-      .catch(err => console.error(err));
+      .catch(err => console.error("Error toggling todo:", err));
   };
 
   // Delete a ToDo item
   const deleteTodo = id => {
     axios.delete(`/api/todos/${id}`)
       .then(() => setTodos(todos.filter(todo => todo._id !== id)))
-      .catch(err => console.error(err));
+      .catch(err => console.error("Error deleting todo:", err));
   };
 
   return (
