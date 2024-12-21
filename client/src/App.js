@@ -6,34 +6,44 @@ function App() {
     const [taskText, setTaskText] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:5000/tasks')
+        fetch('http://server:5000/tasks') // Use the Docker service name
             .then((response) => response.json())
             .then((data) => setTasks(data));
     }, []);
 
     const addTask = () => {
-        if (taskText.trim() === '') return;
-        fetch('http://localhost:5000/tasks', {
+        if (taskText.trim() === '') {
+            alert('Please enter a task!');
+            return;
+        }
+        fetch('http://server:5000/tasks', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: taskText }),
-        }).then((res) => res.json()).then((task) => {
-            setTasks([...tasks, task]);
-            setTaskText('');
-        });
+        })
+            .then((response) => response.json())
+            .then((task) => setTasks([...tasks, task]));
+        setTaskText('');
     };
 
     const toggleTask = (id) => {
-        fetch(`http://localhost:5000/tasks/${id}`, { method: 'PUT' })
-            .then((res) => res.json())
+        fetch(`http://server:5000/tasks/${id}`, {
+            method: 'PUT',
+        })
+            .then((response) => response.json())
             .then((updatedTask) => {
-                setTasks(tasks.map((task) => task._id === updatedTask._id ? updatedTask : task));
+                setTasks(
+                    tasks.map((task) => (task._id === updatedTask._id ? updatedTask : task))
+                );
             });
     };
 
     const deleteTask = (id) => {
-        fetch(`http://localhost:5000/tasks/${id}`, { method: 'DELETE' })
-            .then(() => setTasks(tasks.filter((task) => task._id !== id)));
+        fetch(`http://server:5000/tasks/${id}`, {
+            method: 'DELETE',
+        }).then(() => {
+            setTasks(tasks.filter((task) => task._id !== id));
+        });
     };
 
     return (
@@ -44,7 +54,7 @@ function App() {
                     type="text"
                     value={taskText}
                     onChange={(e) => setTaskText(e.target.value)}
-                    placeholder="Add a task"
+                    placeholder="Add a new task..."
                 />
                 <button onClick={addTask}>Add</button>
             </div>
@@ -59,7 +69,9 @@ function App() {
                         <button onClick={(e) => {
                             e.stopPropagation();
                             deleteTask(task._id);
-                        }}>Delete</button>
+                        }}>
+                            Delete
+                        </button>
                     </li>
                 ))}
             </ul>
