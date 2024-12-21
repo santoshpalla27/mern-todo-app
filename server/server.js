@@ -1,15 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const app = express();
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://mongo:27017/todo', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+mongoose
+    .connect('mongodb://mongo:27017/todo', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((err) => console.error('MongoDB connection error:', err));
 
 const TaskSchema = new mongoose.Schema({
     text: String,
@@ -42,5 +42,5 @@ app.delete('/tasks/:id', async (req, res) => {
 });
 
 app.listen(5000, () => {
-    console.log('Server is running on port 5000');
+    console.log('Server running on port 5000');
 });

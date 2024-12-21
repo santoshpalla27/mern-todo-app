@@ -29,7 +29,6 @@ services:
 
 volumes:
   mongo-data:
-
 networks:
   todo-app-network:
     driver: bridge
