@@ -1,34 +1,40 @@
-version: '3.8'
+version: '3.9'
+
 services:
+  mongo:
+    image: mongo:6.0
+    container_name: mern-todo-app-mongo
+    networks:
+      - todo-app-network
+    volumes:
+      - mongo-data:/data/db
+
+  server:
+    build:
+      context: ./server
+    container_name: mern-todo-app-server
+    networks:
+      - todo-app-network
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/todo-app
+    depends_on:
+      - mongo
+
   client:
-    build: ./client
+    build:
+      context: ./client
+    container_name: mern-todo-app-client
+    networks:
+      - todo-app-network
     ports:
       - "3000:3000"
     depends_on:
       - server
-    networks:
-      - todo-app-network
 
-  server:
-    build: ./server
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mongo
-    networks:
-      - todo-app-network
-
-  mongo:
-    image: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - todo-app-network
+networks:
+  todo-app-network:
 
 volumes:
   mongo-data:
-networks:
-  todo-app-network:
-    driver: bridge
