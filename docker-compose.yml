@@ -1,40 +1,33 @@
-version: '3.9'
+version: '3.8'
 
 services:
-  mongo:
-    image: mongo:6.0
-    container_name: mern-todo-app-mongo
-    networks:
-      - todo-app-network
+  mongodb:
+    image: mongo:5.0.2
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    ports:
+      - "27017:27017"
     volumes:
-      - mongo-data:/data/db
+      - db:/data/db
 
-  server:
-    build:
-      context: ./server
-    container_name: mern-todo-app-server
-    networks:
-      - todo-app-network
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      - MONGODB_URI=mongodb://root:123456@mongodb:27017/mern_todo_db
     ports:
       - "5000:5000"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/todo-app
     depends_on:
-      - mongo
+      - mongodb
 
-  client:
-    build:
-      context: ./client
-    container_name: mern-todo-app-client
-    networks:
-      - todo-app-network
+  frontend:
+    build: ./frontend
     ports:
-      - "3000:3000"
+      - "3000:80"
     depends_on:
-      - server
-
-networks:
-  todo-app-network:
+      - backend
 
 volumes:
-  mongo-data:
+  db:
