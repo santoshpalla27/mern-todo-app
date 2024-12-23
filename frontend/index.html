@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Three-Tier App</title>
+</head>
+<body>
+  <h1>Welcome to the Three-Tier App</h1>
+  <button onclick="fetchData()">Get Backend Data</button>
+  <p id="data"></p>
+  <script>
+    async function fetchData() {
+      const response = await fetch('http://backend:5000/data');  // Use service name 'backend'
+      const data = await response.json();
+      document.getElementById('data').textContent = JSON.stringify(data);
+    }
+  </script>
+</body>
+</html>
