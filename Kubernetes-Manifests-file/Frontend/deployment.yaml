@@ -23,7 +23,7 @@ spec:
     spec: 
       containers:
       - name: frontend
-        image: mern-todo-app-frontend
+        image: santoshpalla27/3-tier:frontend
         imagePullPolicy: Always
         env:
           - name: REACT_APP_BACKEND_URL
