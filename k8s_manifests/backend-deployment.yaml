@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
-  namespace: three-tier
+  name: backend
+  namespace: workshop
   labels:
-    role: api
+    role: backend
     env: demo
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -15,14 +15,14 @@ spec:
       maxUnavailable: 25%
   selector:
     matchLabels:
-      role: api
+      role: backend
   template:
     metadata:
       labels:
-        role: api
+        role: backend
     spec:
       containers:
-      - name: api
+      - name: backend
         image: santoshpalla27/3-tier:backend
         imagePullPolicy: Always
         env:
@@ -39,24 +39,17 @@ spec:
                 name: mongo-sec
                 key: password
         ports:
-        - containerPort: 3500
+        - containerPort: 8080
         livenessProbe:
           httpGet:
-            path: /healthz
-            port: 3500
+            path: /ok
+            port: 8080
           initialDelaySeconds: 2
           periodSeconds: 5
         readinessProbe:
           httpGet:
-            path: /ready
-            port: 3500
+             path: /ok
+             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
           successThreshold: 1
-        startupProbe:
-          httpGet:
-            path: /started
-            port: 3500
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          failureThreshold: 30
