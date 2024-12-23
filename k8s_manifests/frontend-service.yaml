@@ -6,7 +6,7 @@ metadata:
   namespace: workshop
 spec:
   ports:
-  - port: 3000
+  - port: 80
     protocol: TCP
   type: ClusterIP
   selector:
