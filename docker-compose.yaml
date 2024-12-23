@@ -1,8 +1,7 @@
 version: '3.8'
 services:
   mongodb:
-    build:
-      context: ./mongodb
+    image: mongo:latest  # Use the official MongoDB image
     ports:
       - "27017:27017"
     environment:
