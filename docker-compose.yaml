@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  mongodb:
+    build:
+      context: ./mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: Three-Tier-Project
+    volumes:
+      - mongo-data:/data/db
+
+  api:
+    build:
+      context: ./api
+    ports:
+      - "3500:3500"
+    environment:
+      MONGO_CONN_STR: mongodb://mongodb:27017/todo?directConnection=true
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: Three-Tier-Project
+    depends_on:
+      - mongodb
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_BACKEND_URL: "http://api:3500/api/tasks"
+
+volumes:
+  mongo-data:
