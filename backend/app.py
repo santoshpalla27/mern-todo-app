@@ -1,22 +1,27 @@
 # backend/app.py
 from flask import Flask, jsonify
 import psycopg2
+import os
 
 app = Flask(__name__)
 
 def get_data():
-    conn = psycopg2.connect(
-        dbname='mydb',
-        user='user',
-        password='password',
-        host='db'
-    )
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM mytable')
-    rows = cur.fetchall()
-    cur.close()
-    conn.close()
-    return rows
+    try:
+        conn = psycopg2.connect(
+            dbname=os.getenv('POSTGRES_DB', 'mydb'),
+            user=os.getenv('POSTGRES_USER', 'user'),
+            password=os.getenv('POSTGRES_PASSWORD', 'password'),
+            host=os.getenv('POSTGRES_HOST', 'db')
+        )
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM mytable')
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+        return rows
+    except Exception as e:
+        print(f"Error: {e}")
+        return []
 
 @app.route('/data')
 def data():
