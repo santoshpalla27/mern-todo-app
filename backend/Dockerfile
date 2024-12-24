@@ -1,18 +1,20 @@
 # backend/Dockerfile
-FROM python:3.9-slim
+FROM node:16-alpine
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy the backend application code into the container
-COPY ./app.py /app/
-COPY ./requirements.txt /app/
+# Copy package files
+COPY package*.json ./
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN npm install
 
-# Expose the Flask app port
+# Copy source code
+COPY . .
+
+# Expose port
 EXPOSE 5000
 
-# Start the Flask app when the container runs
-CMD ["flask", "run"]
+# Start the server
+CMD ["node", "server.js"]

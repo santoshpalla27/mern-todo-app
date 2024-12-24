@@ -1,8 +1,11 @@
--- database/init.sql
-CREATE TABLE sample_data (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    value VARCHAR(255) NOT NULL
+-- Create users table
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL
 );
 
-INSERT INTO sample_data (value) VALUES ('Hello, World!');
-INSERT INTO sample_data (value) VALUES ('Welcome to the Three-Tier App!');
+-- Insert sample data
+INSERT INTO users (username, email) VALUES 
+  ('john_doe', 'john@example.com'),
+  ('jane_smith', 'jane@example.com');
