@@ -1,0 +1,20 @@
+<!-- frontend/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-Tier App</title>
+</head>
+<body>
+    <h1>Data from Backend:</h1>
+    <div id="data"></div>
+    <script>
+        fetch('http://backend:5000/data')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('data').innerText = JSON.stringify(data);
+            });
+    </script>
+</body>
+</html>
