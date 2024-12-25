@@ -1,15 +1,16 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-// Get MongoDB credentials and database name from environment variables
-const username = process.env.MONGO_USERNAME || "myuser";   // Default username if not set
-const password = process.env.MONGO_PASSWORD || "mypassword";  // Default password if not set
-const dbName = process.env.MONGO_DB_NAME || "employee";   // Default database if not set
+// Get MongoDB credentials and host from environment variables
+const dbUser = process.env.MONGO_DB_USER || 'user';              // Default to 'user' if not provided
+const dbPassword = process.env.MONGO_DB_PASSWORD || 'password';  // Default to 'password' if not provided
+const dbName = process.env.MONGO_DB_NAME || 'employee';          // Default to 'employee' if not provided
+const dbHost = process.env.MONGO_DB_HOST || 'mongodb';           // Default to 'mongodb' if not provided (service name in docker-compose)
+const dbPort = process.env.MONGO_DB_PORT || '27017';             // Default to '27017' if not provided (default MongoDB port)
 
-// Construct MongoDB URI with username, password, and database name
-const URI = `mongodb://${username}:${password}@mongodb:27017/${dbName}`;
+// Build the Mongo URI dynamically
+const mongoURI = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?retryWrites=true&w=majority`;
 
-// Create the MongoClient
-const client = new MongoClient(URI, {
+const client = new MongoClient(mongoURI, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -17,15 +18,20 @@ const client = new MongoClient(URI, {
   },
 });
 
-try {
-  // Connect the client to the server
-  await client.connect();
-  // Send a ping to confirm a successful connection
-  await client.db().command({ ping: 1 });  // Default to the specified database
-  console.log("Pinged your deployment. You successfully connected to MongoDB!");
-} catch (err) {
-  console.error("Error connecting to MongoDB:", err);
+async function connectMongo() {
+  try {
+    // Connect the client to the server
+    await client.connect();
+    // Send a ping to confirm successful connection
+    await client.db().command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } catch (err) {
+    console.error("Failed to connect to MongoDB:", err);
+  }
 }
 
-// The database is already specified in the URI, no need to explicitly mention it here
+// Run the connection function
+connectMongo();
+
+// Export the database instance to use in the app
 export default client.db();
