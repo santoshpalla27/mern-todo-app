@@ -1,38 +1,39 @@
+version: "3.9"
+
 services:
   backend:
     build: ./mern/backend
     ports:
-      - "5050:5050" 
+      - "5050:5050"
     networks:
       - mern_network
     environment:
-      MONGO_URI: mongodb://mongodb:27017   /// Protocol://ServiceName:Port/DatabaseName
+      MONGO_URI: mongodb://mongodb:27017/employees # Updated to match the database code
     depends_on:
       - mongodb
 
   frontend:
     build: ./mern/frontend
     ports:
-      - "5173:5173"  
+      - "5173:5173"
     networks:
       - mern_network
     environment:
-      REACT_APP_API_URL: http://54.227.166.177:5050  // REACT_APP IS THE DEFAULT PREFIX FOR ENVIRONMENT VARIABLES IN REACT
+      REACT_APP_API_URL: http://54.227.166.177:5050 # Corrected comment format for YAML
 
   mongodb:
-    image: mongo:latest  
+    image: mongo:latest
     ports:
-      - "27017:27017"  
+      - "27017:27017"
     networks:
       - mern_network
     volumes:
-      - mongo-data:/data/db  
+      - mongo-data:/data/db
 
 networks:
   mern_network:
-    driver: bridge 
+    driver: bridge
 
 volumes:
   mongo-data:
-    driver: local  # Persist MongoDB data locally
-
+    driver: local
