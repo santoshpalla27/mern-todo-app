@@ -17,7 +17,7 @@ export default function Record() {
       if(!id) return;
       setIsNew(false);
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/record/${params.id.toString()}`  // process.env is a global variable injected by Create React App this will allow us to access the environment variables.
+        `${process.env.REACT_APP_API_URL}/record/${params.id.toString()}`
       );
       if (!response.ok) {
         const message = `An error has occurred: ${response.statusText}`;
@@ -51,7 +51,7 @@ export default function Record() {
       let response;
       if (isNew) {
         // if we are adding a new record we will POST to /record.
-        response = await fetch("${process.env.REACT_APP_API_URL}/record", {
+        response = await fetch("${process.env.REACT_APP_API_URL}/record" ,{
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -60,7 +60,7 @@ export default function Record() {
         });
       } else {
         // if we are updating a record we will PATCH to /record/:id.
-        response = await fetch(`${process.env.REACT_APP_API_URL}/record/${params.id}`, {  // process.env is a global variable injected by Create React App this will allow us to access the environment variables.
+        response = await fetch(`${process.env.REACT_APP_API_URL}/record/${params.id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
