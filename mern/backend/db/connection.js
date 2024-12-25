@@ -1,16 +1,8 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-// Get MongoDB credentials and host from environment variables
-const dbUser = process.env.MONGO_DB_USER || 'user';              // Default to 'user' if not provided
-const dbPassword = process.env.MONGO_DB_PASSWORD || 'password';  // Default to 'password' if not provided
-const dbName = process.env.MONGO_DB_NAME || 'employee';          // Default to 'employee' if not provided
-const dbHost = process.env.MONGO_DB_HOST || 'mongodb';           // Default to 'mongodb' if not provided (service name in docker-compose)
-const dbPort = process.env.MONGO_DB_PORT || '27017';             // Default to '27017' if not provided (default MongoDB port)
-
-// Build the Mongo URI dynamically
-const mongoURI = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?retryWrites=true&w=majority`;
-
-const client = new MongoClient(mongoURI, {
+// Get the Mongo URI from environment variables, defaulting to the one specified in docker-compose
+const URI = process.env.MONGO_URI || "mongodb://mongodb:27017/employee";  // Default to employee database
+const client = new MongoClient(URI, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -18,20 +10,15 @@ const client = new MongoClient(mongoURI, {
   },
 });
 
-async function connectMongo() {
-  try {
-    // Connect the client to the server
-    await client.connect();
-    // Send a ping to confirm successful connection
-    await client.db().command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } catch (err) {
-    console.error("Failed to connect to MongoDB:", err);
-  }
+try {
+  // Connect the client to the server
+  await client.connect();
+  // Send a ping to confirm a successful connection
+  await client.db().command({ ping: 1 });  // Default to the "employee" database from the URI
+  console.log("Pinged your deployment. You successfully connected to MongoDB!");
+} catch (err) {
+  console.error(err);
 }
 
-// Run the connection function
-connectMongo();
-
-// Export the database instance to use in the app
+// The "employee" database is already specified in the URI, no need to explicitly mention it here
 export default client.db();

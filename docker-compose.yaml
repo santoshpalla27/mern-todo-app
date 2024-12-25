@@ -6,13 +6,10 @@ services:
     networks:
       - mern_network
     environment:
-      MONGO_DB_NAME: employee             # MongoDB database name
-      MONGO_DB_USER: user                 # MongoDB username
-      MONGO_DB_PASSWORD: password         # MongoDB user password
-      MONGO_DB_HOST: mongodb              # MongoDB host (the service name of MongoDB)
-      MONGO_DB_PORT: 27017                # MongoDB port (default 27017)
+      MONGO_URI: mongodb://mongodb:27017/employee  
     depends_on:
       - mongodb
+
 
   frontend:
     build: ./mern/frontend
@@ -29,12 +26,6 @@ services:
       - "27017:27017"  
     networks:
       - mern_network
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root        # MongoDB root username
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword # MongoDB root password
-      MONGO_INITDB_DATABASE: employee         # Database to create
-      MONGO_INITDB_USER: user                 # MongoDB user
-      MONGO_INITDB_PASSWORD: password         # MongoDB user password
     volumes:
       - mongo-data:/data/db  
 
@@ -45,3 +36,4 @@ networks:
 volumes:
   mongo-data:
     driver: local  # Persist MongoDB data locally
+
