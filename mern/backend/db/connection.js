@@ -1,7 +1,7 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 // Get the Mongo URI from environment variables, defaulting to the one specified in docker-compose
-const URI = process.env.MONGO_URI || "mongodb://mongodb:27017/employee";  // Default to employee database
+const URI = process.env.MONGO_URI || "mongodb://mongodb:27017";  // Default to employee database
 const client = new MongoClient(URI, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -21,4 +21,6 @@ try {
 }
 
 // The "employee" database is already specified in the URI, no need to explicitly mention it here
-export default client.db();
+let db = client.db("employees");
+
+export default db;
