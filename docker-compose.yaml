@@ -1,16 +1,12 @@
-version: "3.8"
 services:
   backend:
     build: ./mern/backend
     ports:
-      - "5050:5050"
+      - "5050:5050" 
     networks:
       - mern_network
     environment:
-      MONGO_USERNAME: root
-      MONGO_PASSWORD: password
-      MONGO_HOST: mongodb
-      MONGO_DB: employees
+      MONGO_URI: mongodb://mongo:27017/mydatabase  
     depends_on:
       - mongodb
 
@@ -24,16 +20,13 @@ services:
       VITE_API_URL: http://54.227.166.177:5050
 
   mongodb:
-    image: mongo:latest
+    image: mongo:latest  
     ports:
-      - "27017:27017"
+      - "27017:27017"  
     networks:
       - mern_network
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
-      - mongo-data:/data/db
+      - mongo-data:/data/db  
 
 networks:
   mern_network:
