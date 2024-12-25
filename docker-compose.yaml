@@ -6,7 +6,10 @@ services:
     networks:
       - mern_network
     environment:
-      MONGO_URI: mongodb://mongo:27017/mydatabase  
+      MONGO_USERNAME: myuser         # Set MongoDB username
+      MONGO_PASSWORD: mypassword     # Set MongoDB password
+      MONGO_DB_NAME: employee        # Set MongoDB database name
+      MONGO_URI: mongodb://mongodb:27017  # Use base MongoDB URI (without database)
     depends_on:
       - mongodb
 
@@ -25,6 +28,10 @@ services:
       - "27017:27017"  
     networks:
       - mern_network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: myuser      # Root username
+      MONGO_INITDB_ROOT_PASSWORD: mypassword  # Root password
+      MONGO_INITDB_DATABASE: employee         # Default database
     volumes:
       - mongo-data:/data/db  
 
@@ -35,4 +42,3 @@ networks:
 volumes:
   mongo-data:
     driver: local  # Persist MongoDB data locally
-
