@@ -1,17 +1,15 @@
 import express from "express";
 import cors from "cors";
-import records from "./routes/record.js";  // Assuming this file handles routes for /record
+import records from "./routes/record.js";
 
 const PORT = process.env.PORT || 5050;
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("/record", records);
 
-// Ensure this route is correctly defined
-app.use("/backend/record", records);
-
-// Start the server
+// start the Express server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
