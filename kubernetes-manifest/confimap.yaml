@@ -4,5 +4,5 @@ kind: ConfigMap
 metadata:
   name: app-config
 data:
-  VITE_API_URL: "http://santosh.website/"  # Update to your actual frontend API URL
+  VITE_API_URL: "http://santosh.website/backend"  # Update to your actual frontend API URL
   MONGO_URI: "mongodb://mongodb:27017"  
