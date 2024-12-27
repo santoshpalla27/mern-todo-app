@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: santoshpalla27/3-tier:frontend-react
+        image: santoshpalla27/3-tier:frontend
         ports:
         - containerPort: 5173
         env:
