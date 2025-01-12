@@ -4,6 +4,7 @@ kind: Ingress
 metadata:
   name: app-ingress
   annotations:
+    alb.ingress.kubernetes.io/subnets: subnet-095bba76aaa752664,subnet-0c37d2bf31f41405f
     alb.ingress.kubernetes.io/scheme: internet-facing 
     alb.ingress.kubernetes.io/target-type: ip 
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]' # ALB listens on port 80
