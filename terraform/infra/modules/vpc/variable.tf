@@ -10,17 +10,20 @@ variable "project_name" {
 
 variable "public_subnet" {
   description = "The CIDR block for the public subnet"
-  type        = string
+  type        = list(string)
 }
+
 variable "private_subnet" {
   description = "The CIDR block for the private subnet"
   type        = string
 }
+
 variable "availability_zones_public" {
-  description = "The availability zones to use"
-  type        = string
+  description = "The availability zones to use for public subnets"
+  type        = list(string)
 }
-variable "availability_zone_private" {
+
+variable "private_availability_zone" {
   description = "The availability zone for the private subnet"
   type        = string
 }

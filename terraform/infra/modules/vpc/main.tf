@@ -6,19 +6,20 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "public" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.public_subnet
-  availability_zone = var.availability_zones_public
+  count = length(var.availability_zones_public)
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public_subnet[count.index]
+  availability_zone       = var.availability_zones_public[count.index]
   map_public_ip_on_launch = true
   tags = {
-    Name = "${var.project_name}-public"
+    Name = "${var.project_name}-public${count.index}"
   }
 }
 
 resource "aws_subnet" "private" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnet
-  availability_zone = var.availability_zone_private
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.private_subnet
+  availability_zone       = var.private_availability_zone
   tags = {
     Name = "${var.project_name}-private"
   }
@@ -44,7 +45,8 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public.id
+  count         = length(var.availability_zones_public)
+  subnet_id     = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
 
@@ -54,7 +56,7 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public.id
+  subnet_id     = aws_subnet.public[0].id
   tags = {
     Name = "${var.project_name}-nat"
   }
@@ -65,6 +67,7 @@ resource "aws_route_table" "private" {
   tags = {
     Name = "${var.project_name}-private-rt"
   }
+
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat.id
@@ -76,9 +79,8 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
-
 resource "aws_security_group" "allow_ssh" {
-  vpc_id = aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
   name        = "allow_ssh"
   description = "Security group allowing SSH communication"
 
@@ -86,7 +88,7 @@ resource "aws_security_group" "allow_ssh" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] # Restrict this for better security
   }
 
   egress {
@@ -100,15 +102,17 @@ resource "aws_security_group" "allow_ssh" {
     Name = "AllowSSH"
   }
 }
+
 resource "aws_security_group" "main_server" {
   vpc_id      = aws_vpc.main.id
   name        = "main_server"
   description = "Security group allowing SSH, HTTP (port 8080), and custom port 9000 communication"
+
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] # Restrict this for better security
   }
 
   ingress {
@@ -124,6 +128,7 @@ resource "aws_security_group" "main_server" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -135,4 +140,3 @@ resource "aws_security_group" "main_server" {
     Name = "main-server"
   }
 }
-
