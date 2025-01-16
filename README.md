@@ -112,15 +112,6 @@ The application is deployed to the EKS cluster using these manifests.
 ### Monitoring
 - Prometheus
 - Grafana
-
----
-
-## Future Enhancements
-- Implement horizontal auto-scaling based on traffic patterns.
-- Introduce AWS RDS for managed relational databases.
-- Incorporate Helm charts for application deployment simplification.
-- Enhance security with tools like HashiCorp Vault for secret management.
-
 ---
 
 This documentation serves as a detailed reference for the architecture, infrastructure, deployment, and tools used in the development and maintenance of the Three-Tier Employee Application.
