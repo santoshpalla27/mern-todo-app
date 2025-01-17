@@ -70,16 +70,6 @@
       register: trivy_version
       failed_when: trivy_version.rc != 0
 
-    - name: Run SonarQube container using Docker CLI
-      command: docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
-      register: docker_run_result
-      failed_when: docker_run_result.rc != 0
-
-    - name: Verify SonarQube container is running
-      shell: docker ps | grep sonar
-      register: container_status
-      failed_when: container_status.rc != 0
-
     - name: Download eksctl binary
       get_url:
         url: "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz"

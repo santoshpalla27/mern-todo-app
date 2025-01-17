@@ -13,9 +13,9 @@ module "iam" {
 module "ec2" {
   source = "./modules/ec2"
   instance_ami = "ami-05576a079321f21f8"
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   subnet_id = module.vpc.public_subnet_id[0]
-  instance_name = "ansible-instance"
+  instance_name = "ansible-host-sonarqube"
   iam_instance_profile = module.iam.instance_profile
   security_group_id = module.vpc.allow_ssh_sg_id
   key_name = "santosh"
