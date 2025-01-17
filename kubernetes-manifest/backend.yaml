@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: santoshpalla27/3-tier:backend-5
+        image: santoshpalla27/3-tier:backend-6
         ports:
         - containerPort: 5050
         env:
